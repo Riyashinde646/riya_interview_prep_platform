@@ -1,5 +1,6 @@
 import Agent from "@/components/Agent";
 import { getCurrentUser } from "@/lib/actions/auth.actions";
+
 const Page = async () => {
   const user = await getCurrentUser();
 

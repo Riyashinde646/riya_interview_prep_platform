@@ -3,6 +3,7 @@
 import { auth, db } from "@/firebase/admin";
 import { error } from "console";
 import { Auth } from "firebase-admin/auth";
+import { CollectionReference, DocumentData } from "firebase-admin/firestore";
 import { getMaxAge } from "next/dist/server/image-optimizer";
 import { cookies } from "next/headers";
 import path from "path";
@@ -126,3 +127,4 @@ export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
 }
+
