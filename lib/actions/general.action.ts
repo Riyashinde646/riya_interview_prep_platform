@@ -95,19 +95,21 @@ export async function getLatestInterviews(
 ): Promise<Interview[] | null> {
   const { userId, limit = 20 } = params;
 
-  const interviews = await db
+  const snapshot = await db
     .collection("interviews")
-    .orderBy("createdAt", "desc")
     .where("finalized", "==", true)
-    .where("userId", "!=", userId)
-    .limit(limit)
+    .orderBy("createdAt", "desc")
+    .limit(limit * 2) // Increase limit to compensate for local filtering
     .get();
 
-  return interviews.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Interview[];
+  const filteredInterviews = snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((interview) => interview.userId !== userId)
+    .slice(0, limit); // Limit after filtering
+
+  return filteredInterviews as Interview[];
 }
+
 
 export async function getInterviewsByUserId(
   userId: string
